@@ -1,4 +1,4 @@
-![logo](https://github.com/mdoege/PyPaint/raw/master/logo.gif "PyPaint logo")
+![logo](https://github.com/mdoege/PyPaint/raw/master/logo.png "PyPaint logo")
 
 ## PyPaint
 
@@ -24,14 +24,4 @@ Press Space to erase drawing.
 
 Press Return to save as PNG in current directory.
 (Filename is date plus time.)
-
-### Samples
-
-![sample1](https://github.com/mdoege/PyPaint/raw/master/samples/advent.png "Advent wreath")
-![sample2](https://github.com/mdoege/PyPaint/raw/master/samples/bob_ross.png "Bob Ross landscape")
-![sample3](https://github.com/mdoege/PyPaint/raw/master/samples/computer.png "Computer")
-![sample4](https://github.com/mdoege/PyPaint/raw/master/samples/enjoy.png "Enjoy!")
-![sample5](https://github.com/mdoege/PyPaint/raw/master/samples/rabbit.png "Nice rabbit")
-![sample6](https://github.com/mdoege/PyPaint/raw/master/samples/star_trek.png "The Enterprise")
-![sample7](https://github.com/mdoege/PyPaint/raw/master/samples/trees.png "Happy little trees")
 
