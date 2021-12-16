@@ -2,10 +2,13 @@
 
 # Paint program
 
-import pygame, numpy, time
+import pygame, time
 
 # canvas size
 RES = 1200, 800
+
+# brush size
+BRUSH = 21
 
 # color palette in RGB hex:
 cols = (
@@ -29,21 +32,21 @@ class Paint:
         self.screen = pygame.display.set_mode(RES)
         pygame.display.set_caption('Paint')
         self.clock = pygame.time.Clock()
-        self.arr = numpy.empty(RES)
-        self.arr[:,:] = 0xffffff
+        self.img = pygame.Surface(RES)
+        self.img.fill(0xffffff)
         self.mdown = False
         self.col = 0
+        self.colpic = pygame.Surface((50, 50))
         self.getcolpic()
 
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self.arr[:,:] = 0xffffff
+                self.img.fill(0xffffff)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                savepic = pygame.Surface(RES)
-                pygame.surfarray.blit_array(savepic, self.arr)
-                pygame.image.save(savepic, time.strftime("%y%m%d_%H%M%S.png"))
+                pygame.image.save(self.img,
+                        time.strftime("%y%m%d_%H%M%S.png"))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.mdown = True
             if event.type == pygame.MOUSEBUTTONUP:
@@ -62,15 +65,15 @@ class Paint:
         pygame.quit()
 
     def getcolpic(self):
-        self.colpic = pygame.Surface((50, 50))
         self.colpic.fill(cols[self.col])
 
     def update(self):
         if self.mdown:
             x, y = pygame.mouse.get_pos()
-            self.arr[x-10:x+10,y-10:y+10] = cols[self.col]
+            pygame.draw.rect(self.img, cols[self.col],
+                [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
 
-        pygame.surfarray.blit_array(self.screen, self.arr)
+        self.screen.blit(self.img, (0, 0))
         self.screen.blit(self.colpic, (0, 0))
         pygame.display.flip()
 

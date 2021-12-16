@@ -4,7 +4,7 @@
 
 A very simple Python program for basic drawing and doodling
 
-Needs PyGame and NumPy
+Needs PyGame
 
 ### Main non-features
 
