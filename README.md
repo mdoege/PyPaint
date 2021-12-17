@@ -10,7 +10,7 @@ Needs PyGame
 
 * Fixed canvas size (1200x800 px)
 * Fixed brush size; only one drawing tool
-* 10 colors
+* Palette of 10 colors (default) or 16 colors (PICO-8 palette)
 * No undo (but you can overpaint in white)
 * No image loading (to prevent George Lucas syndrome)
 * No output filename or file format selection
@@ -19,6 +19,8 @@ Needs PyGame
 
 Paint with the mouse. The mouse wheel selects a color (see colored square
 in top left corner).
+
+Press P to switch to the PICO-8 palette.
 
 Press Space to erase drawing.
 

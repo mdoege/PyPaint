@@ -10,12 +10,13 @@ RES = 1200, 800
 # brush size
 BRUSH = 21
 
-# color palette in RGB hex:
-cols = (
+# color palettes in RGB hex:
+
+# GNOME
+cols_g = (
 0,
 0xffffff,
 0x555753,
-
 0xcc0000,
 0xf57900,
 0xedd400,
@@ -23,7 +24,26 @@ cols = (
 0x3465a4,
 0x75507b,
 0xc17d11,
+)
 
+# PICO-8
+cols_p = (
+0,
+0x1d2b53,
+0x7e2553,
+0x008751,
+0xab5236,
+0x5f574f,
+0xc2c3c7,
+0xfff1e8,
+0xff004d,
+0xffa300,
+0xffec27,
+0x00e436,
+0x29adff,
+0x83769c,
+0xff77a8,
+0xffccaa,
 )
 
 class Paint:
@@ -35,6 +55,7 @@ class Paint:
         self.img = pygame.Surface(RES)
         self.img.fill(0xffffff)
         self.mdown = False
+        self.cols = cols_g
         self.col = 0
         self.colpic = pygame.Surface((50, 50))
         self.getcolpic()
@@ -52,8 +73,11 @@ class Paint:
             if event.type == pygame.MOUSEBUTTONUP:
                 self.mdown = False
             if event.type == pygame.MOUSEWHEEL:
-                self.col += event.y
-                self.col = self.col % len(cols)
+                self.col -= event.y
+                self.col = self.col % len(self.cols)
+                self.getcolpic()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                self.cols = cols_p
                 self.getcolpic()
 
     def run(self):
@@ -65,12 +89,12 @@ class Paint:
         pygame.quit()
 
     def getcolpic(self):
-        self.colpic.fill(cols[self.col])
+        self.colpic.fill(self.cols[self.col])
 
     def update(self):
         if self.mdown:
             x, y = pygame.mouse.get_pos()
-            pygame.draw.rect(self.img, cols[self.col],
+            pygame.draw.rect(self.img, self.cols[self.col],
                 [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
 
         self.screen.blit(self.img, (0, 0))
