@@ -16,7 +16,7 @@ Needs PyGame
 
 ### Usage
 
- python pypaint.py [input image]
+    python pypaint.py [input image]
 
 Paint with the mouse. The mouse wheel selects a color (see colored square
 in top left corner).
