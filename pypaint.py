@@ -52,11 +52,41 @@ cols_p = (
 0xffccaa,
 )
 
+tname = "Dotted Freehand", "Airbrush", "Fill Tool"
+
+# modified version of code at
+# https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
+def fill(surface, position, fill_color):
+    w, h = surface.get_size()
+    surf_array = pygame.surfarray.pixels2d(surface)
+    orig = surf_array[position]
+
+    frontier = [position]
+    while len(frontier) > 0:
+        # protect against out of memory errors due to runaway filling:
+        if len(frontier) > RES[0] * RES[1]:
+            pygame.surfarray.blit_array(surface, surf_array)
+            del surf_array
+            return
+        x, y = frontier.pop()
+        surf_array[x, y] = fill_color
+
+        if x < w - 1 and surf_array[x + 1, y] == orig:
+            frontier.append((x + 1, y))
+        if x > 0 and surf_array[x - 1, y] == orig:
+            frontier.append((x - 1, y))
+        if y < h - 1 and surf_array[x, y + 1] == orig:
+            frontier.append((x, y + 1))
+        if y > 0 and surf_array[x, y - 1] == orig:
+            frontier.append((x, y - 1))
+
+    pygame.surfarray.blit_array(surface, surf_array)
+    del surf_array
+
 class Paint:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode(RES)
-        pygame.display.set_caption('Paint')
         self.clock = pygame.time.Clock()
         self.img = pygame.Surface(RES)
         self.img.fill(0xffffff)
@@ -65,7 +95,8 @@ class Paint:
         self.col = 0
         self.colpic = pygame.Surface((50, 50))
         self.getcolpic()
-        self.tool = False
+        self.tool = 0
+        self.title()
 
     def events(self):
         for event in pygame.event.get():
@@ -87,7 +118,10 @@ class Paint:
                 self.cols = cols_p
                 self.getcolpic()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
-                self.tool = not self.tool
+                self.tool += 1
+                if self.tool > 2:
+                    self.tool = 0
+                self.title()
 
     def run(self):
         self.running = True
@@ -100,19 +134,24 @@ class Paint:
     def getcolpic(self):
         self.colpic.fill(self.cols[self.col])
 
+    def title(self):
+        pygame.display.set_caption(f'Paint ({tname[self.tool]})')
+
     def update(self):
         if self.mdown:
             x, y = pygame.mouse.get_pos()
-            if not self.tool:   # pen (aka dotted freehand in Deluxe Paint)
+            if self.tool == 0:   # pen (aka dotted freehand in Deluxe Paint)
                 pygame.draw.rect(self.img, self.cols[self.col],
                     [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
-            else:               # airbrush
+            elif self.tool == 1: # airbrush
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
                     r = random.gauss(0, BRUSH)
                     pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
+            elif self.tool == 2: # flood fill
+                fill(self.img, pygame.mouse.get_pos(), self.cols[self.col])
 
         self.screen.blit(self.img, (0, 0))
         self.screen.blit(self.colpic, (0, 0))

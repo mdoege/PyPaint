@@ -9,7 +9,7 @@ Needs PyGame
 ### Main non-features
 
 * Fixed canvas size (1200x800 px)
-* Only two drawing tools: pen and airbrush
+* Only three drawing tools: pen, airbrush, and fill
 * Palette of 10 colors (default) or 16 colors (PICO-8 palette)
 * No undo (but you can overpaint in white)
 * No image loading (to prevent George Lucas syndrome)
