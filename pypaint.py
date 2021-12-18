@@ -2,7 +2,7 @@
 
 # Paint program
 
-import pygame, sys, time, random, math
+import pygame, numpy, sys, time, random, math
 
 # canvas size
 RES = 1200, 800
@@ -61,27 +61,32 @@ def fill(surface, position, fill_color):
     w, h = surface.get_size()
     surf_array = pygame.surfarray.pixels2d(surface)
     orig = surf_array[position]
-
+    grid = numpy.zeros((w, h), dtype = int)
+    grid[:,:] = 1
     frontier = [position]
     while len(frontier) > 0:
         # protect against out of memory errors due to runaway filling:
         if len(frontier) > w * h:
+            print("STOP FILL")
             pygame.surfarray.blit_array(surface, surf_array)
             del surf_array
             return
         x, y = frontier.pop()
         surf_array[x, y] = fill_color
-
-        if x < w - 1 and surf_array[x + 1, y] == orig:
+        grid[x,y] = 0
+        if x < w - 1 and surf_array[x + 1, y] == orig and grid[x + 1, y]:
             frontier.append((x + 1, y))
-        if x > 0 and surf_array[x - 1, y] == orig:
+            grid[x + 1, y] = 0
+        if x > 0 and surf_array[x - 1, y] == orig and grid[x - 1, y]:
             frontier.append((x - 1, y))
-        if y < h - 1 and surf_array[x, y + 1] == orig:
+            grid[x - 1, y] = 0
+        if y < h - 1 and surf_array[x, y + 1] == orig and grid[x, y + 1]:
             frontier.append((x, y + 1))
-        if y > 0 and surf_array[x, y - 1] == orig:
+            grid[x, y + 1] = 0
+        if y > 0 and surf_array[x, y - 1] == orig and grid[x, y - 1]:
             frontier.append((x, y - 1))
+            grid[x, y - 1] = 0
 
-    pygame.surfarray.blit_array(surface, surf_array)
     del surf_array
 
 class Paint:
