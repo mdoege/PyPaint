@@ -35,6 +35,7 @@ cols_g = (
 # PICO-8
 cols_p = (
 0,
+0xffffff,
 0x1d2b53,
 0x7e2553,
 0x008751,
@@ -164,7 +165,7 @@ class Paint:
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
             elif self.tool == 3: # flood fill
-                fill(self.img, pygame.mouse.get_pos(), self.cols[self.col])
+                fill(self.img, (x, y), self.cols[self.col])
 
         self.screen.blit(self.img, (0, 0))
         self.screen.blit(self.colpic, (0, 0))

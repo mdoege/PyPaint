@@ -10,7 +10,7 @@ Requires PyGame
 
 * Fixed canvas size (1200x800 px)
 * Only four drawing tools: pen (dotted and continuous), airbrush, and fill
-* Palette of 10 colors (default) or 16 colors (PICO-8 palette)
+* Palette of 10 colors (default) or 17 colors (PICO-8 palette + white)
 * No undo (but you can overpaint in white)
 * No output filename or file format selection
 
