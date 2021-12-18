@@ -52,7 +52,7 @@ cols_p = (
 0xffccaa,
 )
 
-tname = "Dotted Freehand", "Airbrush", "Fill Tool"
+tname = "Dotted Freehand", "Continuous Freehand", "Airbrush", "Fill Tool"
 
 # modified version of code at
 # https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
@@ -111,6 +111,7 @@ class Paint:
                         time.strftime("%y%m%d_%H%M%S.png"))
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.mdown = True
+                self.lastpos = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONUP:
                 self.mdown = False
             if event.type == pygame.MOUSEWHEEL:
@@ -122,7 +123,7 @@ class Paint:
                 self.getcolpic()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                 self.tool += 1
-                if self.tool > 2:
+                if self.tool > 3:
                     self.tool = 0
                 self.title()
 
@@ -146,14 +147,22 @@ class Paint:
             if self.tool == 0:   # pen (aka dotted freehand in Deluxe Paint)
                 pygame.draw.rect(self.img, self.cols[self.col],
                     [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
-            elif self.tool == 1: # airbrush
+            elif self.tool == 1: # pen (lines)
+                steps = max(abs(x - self.lastpos[0]), abs(y - self.lastpos[1]))
+                for n in range(steps):
+                    xp = self.lastpos[0] + n * (x - self.lastpos[0]) / steps
+                    yp = self.lastpos[1] + n * (y - self.lastpos[1]) / steps
+                    pygame.draw.rect(self.img, self.cols[self.col],
+                        [xp - BRUSH // 2, yp - BRUSH // 2, BRUSH, BRUSH])
+                self.lastpos = x, y
+            elif self.tool == 2: # airbrush
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
                     r = random.gauss(0, BRUSH)
                     pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
-            elif self.tool == 2: # flood fill
+            elif self.tool == 3: # flood fill
                 fill(self.img, pygame.mouse.get_pos(), self.cols[self.col])
 
         self.screen.blit(self.img, (0, 0))
