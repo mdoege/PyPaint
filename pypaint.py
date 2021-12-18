@@ -2,7 +2,7 @@
 
 # Paint program
 
-import pygame, time, random, math
+import pygame, sys, time, random, math
 
 # canvas size
 RES = 1200, 800
@@ -64,7 +64,7 @@ def fill(surface, position, fill_color):
     frontier = [position]
     while len(frontier) > 0:
         # protect against out of memory errors due to runaway filling:
-        if len(frontier) > RES[0] * RES[1]:
+        if len(frontier) > w * h:
             pygame.surfarray.blit_array(surface, surf_array)
             del surf_array
             return
@@ -88,8 +88,11 @@ class Paint:
         pygame.init()
         self.screen = pygame.display.set_mode(RES)
         self.clock = pygame.time.Clock()
-        self.img = pygame.Surface(RES)
-        self.img.fill(0xffffff)
+        if len(sys.argv) > 1:
+            self.img = pygame.image.load(sys.argv[1]).convert()
+        else:
+            self.img = pygame.Surface(RES)
+            self.img.fill(0xffffff)
         self.mdown = False
         self.cols = cols_g
         self.col = 0

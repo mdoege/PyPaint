@@ -12,10 +12,11 @@ Needs PyGame
 * Only three drawing tools: pen, airbrush, and fill
 * Palette of 10 colors (default) or 16 colors (PICO-8 palette)
 * No undo (but you can overpaint in white)
-* No image loading (to prevent George Lucas syndrome)
 * No output filename or file format selection
 
 ### Usage
+
+ python pypaint.py [input image]
 
 Paint with the mouse. The mouse wheel selects a color (see colored square
 in top left corner).
