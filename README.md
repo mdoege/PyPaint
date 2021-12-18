@@ -23,11 +23,11 @@ Paint with the mouse. Change active color with the mouse wheel
 
 #### Keys
 
-P: Switch to the PICO-8 palette
+**P**: Switch to PICO-8 palette
 
-T: Switch drawing tools
+**T**: Switch drawing tools
 
-Space: Erase drawing
+**Space**: Erase drawing
 
-Return: Save as PNG in current directory (Filename is date plus time.)
+**Return**: Save as PNG in current directory (Filename is date plus time.)
 
