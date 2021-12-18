@@ -2,11 +2,11 @@
 
 ## PyPaint
 
-A very simple Python program for basic drawing and doodling
+A simple Python program for basic drawing and doodling
 
-Needs PyGame
+Requires PyGame
 
-### Main non-features
+### Main features
 
 * Fixed canvas size (1200x800 px)
 * Only three drawing tools: pen, airbrush, and fill
@@ -18,15 +18,16 @@ Needs PyGame
 
     python pypaint.py [input image]
 
-Paint with the mouse. The mouse wheel selects a color (see colored square
-in top left corner).
+Paint with the mouse. Change active color with the mouse wheel
+(see colored square in top left corner).
 
-Press P to switch to the PICO-8 palette.
+#### Keys
 
-Press T to switch drawing tools.
+P: Switch to the PICO-8 palette
 
-Press Space to erase drawing.
+T: Switch drawing tools
 
-Press Return to save as PNG in current directory.
-(Filename is date plus time.)
+Space: Erase drawing
+
+Return: Save as PNG in current directory (Filename is date plus time.)
 
