@@ -148,7 +148,8 @@ class Paint:
                 pygame.draw.rect(self.img, self.cols[self.col],
                     [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
             elif self.tool == 1: # pen (lines)
-                steps = max(abs(x - self.lastpos[0]), abs(y - self.lastpos[1]))
+                steps = max(1, abs(x - self.lastpos[0]),
+                        abs(y - self.lastpos[1]))
                 for n in range(steps):
                     xp = self.lastpos[0] + n * (x - self.lastpos[0]) / steps
                     yp = self.lastpos[1] + n * (y - self.lastpos[1]) / steps
