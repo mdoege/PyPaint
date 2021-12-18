@@ -2,13 +2,19 @@
 
 # Paint program
 
-import pygame, time
+import pygame, time, random, math
 
 # canvas size
 RES = 1200, 800
 
 # brush size
 BRUSH = 21
+
+# airbrush density
+AIRDENS = 10
+
+# airbrush dot size
+AIRSIZE = 4
 
 # color palettes in RGB hex:
 
@@ -59,6 +65,7 @@ class Paint:
         self.col = 0
         self.colpic = pygame.Surface((50, 50))
         self.getcolpic()
+        self.tool = False
 
     def events(self):
         for event in pygame.event.get():
@@ -79,6 +86,8 @@ class Paint:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                 self.cols = cols_p
                 self.getcolpic()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+                self.tool = not self.tool
 
     def run(self):
         self.running = True
@@ -94,8 +103,16 @@ class Paint:
     def update(self):
         if self.mdown:
             x, y = pygame.mouse.get_pos()
-            pygame.draw.rect(self.img, self.cols[self.col],
-                [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
+            if not self.tool:   # pen (aka dotted freehand in Deluxe Paint)
+                pygame.draw.rect(self.img, self.cols[self.col],
+                    [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
+            else:               # airbrush
+                for n in range(AIRDENS):
+                    phi = random.uniform(0, 2 * math.pi)
+                    r = random.gauss(0, BRUSH)
+                    pygame.draw.rect(self.img, self.cols[self.col],
+                        [x + r * math.sin(phi), y + r * math.cos(phi),
+                            AIRSIZE, AIRSIZE])
 
         self.screen.blit(self.img, (0, 0))
         self.screen.blit(self.colpic, (0, 0))
