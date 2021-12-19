@@ -27,6 +27,8 @@ Paint with the mouse. Change active color with the mouse wheel
 
 **T**: Switch drawing tools
 
+**B**: Toggle brush size
+
 **Space**: Erase drawing
 
 **Return**: Save as PNG in current directory (Filename is date plus time.)

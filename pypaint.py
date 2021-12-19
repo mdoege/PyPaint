@@ -7,8 +7,11 @@ import pygame, numpy, sys, time, random, math
 # canvas size
 RES = 1200, 800
 
-# brush size
+# brush size (normal)
 BRUSH = 21
+
+# brush size (small)
+BRUSH_SMALL = 7
 
 # airbrush density
 AIRDENS = 10
@@ -105,6 +108,7 @@ class Paint:
         self.colpic = pygame.Surface((50, 50))
         self.getcolpic()
         self.tool = 0
+        self.small_brush = False
         self.title()
 
     def events(self):
@@ -132,6 +136,9 @@ class Paint:
                 if self.tool > 3:
                     self.tool = 0
                 self.title()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+                self.small_brush = not self.small_brush
+                self.title()
 
     def run(self):
         self.running = True
@@ -145,14 +152,24 @@ class Paint:
         self.colpic.fill(self.cols[self.col])
 
     def title(self):
-        pygame.display.set_caption(f'Paint ({tname[self.tool]})')
+        if self.small_brush:
+            bb = ", small brush"
+        else:
+            bb = ", large brush"
+        if self.tool == 3:
+            bb = ""
+        pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb})')
 
     def update(self):
         if self.mdown:
+            if self.small_brush:
+                brsize = BRUSH_SMALL
+            else:
+                brsize = BRUSH
             x, y = pygame.mouse.get_pos()
             if self.tool == 0:   # pen (aka dotted freehand in Deluxe Paint)
                 pygame.draw.rect(self.img, self.cols[self.col],
-                    [x - BRUSH // 2, y - BRUSH // 2, BRUSH, BRUSH])
+                    [x - brsize // 2, y - brsize // 2, brsize, brsize])
             elif self.tool == 1: # pen (lines)
                 steps = max(1, abs(x - self.lastpos[0]),
                         abs(y - self.lastpos[1]))
@@ -160,12 +177,12 @@ class Paint:
                     xp = self.lastpos[0] + n * (x - self.lastpos[0]) / steps
                     yp = self.lastpos[1] + n * (y - self.lastpos[1]) / steps
                     pygame.draw.rect(self.img, self.cols[self.col],
-                        [xp - BRUSH // 2, yp - BRUSH // 2, BRUSH, BRUSH])
+                        [xp - brsize // 2, yp - brsize // 2, brsize, brsize])
                 self.lastpos = x, y
             elif self.tool == 2: # airbrush
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
-                    r = random.gauss(0, BRUSH)
+                    r = random.gauss(0, brsize)
                     pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
