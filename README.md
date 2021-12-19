@@ -23,11 +23,11 @@ Paint with the mouse. Change active color with the mouse wheel
 
 #### Keys
 
-**P**: Switch to PICO-8 palette
+**P**: Switch to PICO-8 ***p***alette
 
-**T**: Switch drawing tools
+**T**: Switch drawing ***t***ools
 
-**B**: Toggle brush size
+**B**: Toggle ***b***rush size
 
 **Space**: Erase drawing
 
