@@ -22,7 +22,7 @@ AIRSIZE = 4
 # color palettes in RGB hex:
 
 # GNOME
-cols_g = (
+cols_g = [
 0,
 0xffffff,
 0x555753,
@@ -33,10 +33,10 @@ cols_g = (
 0x3465a4,
 0x75507b,
 0xc17d11,
-)
+]
 
 # PICO-8
-cols_p = (
+cols_p = [
 0,
 0xffffff,
 0x1d2b53,
@@ -54,7 +54,7 @@ cols_p = (
 0x83769c,
 0xff77a8,
 0xffccaa,
-)
+]
 
 tname = "Dotted Freehand", "Continuous Freehand", "Airbrush", "Fill Tool"
 
@@ -146,10 +146,16 @@ class Paint:
                 pos = pygame.mouse.get_pos()
                 c = self.img.get_at(pos)
                 ch = c[0] * (256**2) + c[1] * 256 + c[2]
-                for n in range(len(self.cols)):
-                    if ch == self.cols[n]:
+                in_pal = False
+                for n, col in enumerate(self.cols):
+                    if ch == col:
                         self.col = n
+                        in_pal = True
                         self.getcolpic()
+                if not in_pal:
+                    self.cols.append(ch)
+                    self.col = len(self.cols) - 1
+                    self.getcolpic()
 
     def run(self):
         self.running = True

@@ -32,7 +32,7 @@ Paint with the mouse. Change active color with the mouse wheel
 **H**: ***H***ide active color indicator
 
 **C**: ***C***olor picker: get active color from pixel at mouse position
-(only works for colors in current palette)
+(color is added to palette if necessary)
 
 **Space**: Erase drawing
 
