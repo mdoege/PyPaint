@@ -142,6 +142,14 @@ class Paint:
                 self.title()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
                 self.hide = not self.hide
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
+                pos = pygame.mouse.get_pos()
+                c = self.img.get_at(pos)
+                ch = c[0] * (256**2) + c[1] * 256 + c[2]
+                for n in range(len(self.cols)):
+                    if ch == self.cols[n]:
+                        self.col = n
+                        self.getcolpic()
 
     def run(self):
         self.running = True

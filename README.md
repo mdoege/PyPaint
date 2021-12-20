@@ -31,6 +31,9 @@ Paint with the mouse. Change active color with the mouse wheel
 
 **H**: ***H***ide active color indicator
 
+**C**: ***C***color picker: get active color from pixel at mouse position
+(only works for colors in current palette)
+
 **Space**: Erase drawing
 
 **Return**: Save as PNG in current directory (Filename is date plus time.)
