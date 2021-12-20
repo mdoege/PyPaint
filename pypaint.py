@@ -109,6 +109,7 @@ class Paint:
         self.getcolpic()
         self.tool = 0
         self.small_brush = False
+        self.hide = False
         self.title()
 
     def events(self):
@@ -139,6 +140,8 @@ class Paint:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
                 self.small_brush = not self.small_brush
                 self.title()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
+                self.hide = not self.hide
 
     def run(self):
         self.running = True
@@ -190,7 +193,8 @@ class Paint:
                 fill(self.img, (x, y), self.cols[self.col])
 
         self.screen.blit(self.img, (0, 0))
-        self.screen.blit(self.colpic, (0, 0))
+        if not self.hide:
+            self.screen.blit(self.colpic, (0, 0))
         pygame.display.flip()
 
 c = Paint()
