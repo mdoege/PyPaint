@@ -18,8 +18,9 @@ Requires PyGame and NumPy
 
     python pypaint.py [input image]
 
-Paint with the mouse. Change active color with the mouse wheel
-(see colored square in top left corner).
+Paint with the left mouse button. Change active color with the mouse wheel
+(see colored square in top left corner). Switch to next tool with the
+right mouse button.
 
 #### Keys
 

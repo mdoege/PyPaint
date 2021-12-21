@@ -121,10 +121,17 @@ class Paint:
                 pygame.image.save(self.img,
                         time.strftime("%y%m%d_%H%M%S.png"))
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.mdown = True
-                self.lastpos = pygame.mouse.get_pos()
+                if event.button == 1:
+                    self.mdown = True
+                    self.lastpos = pygame.mouse.get_pos()
+                elif event.button == 3:
+                    self.tool += 1
+                    if self.tool > len(tname) - 1:
+                        self.tool = 0
+                    self.title()
             if event.type == pygame.MOUSEBUTTONUP:
-                self.mdown = False
+                if event.button == 1:
+                    self.mdown = False
             if event.type == pygame.MOUSEWHEEL:
                 self.col -= event.y
                 self.col = self.col % len(self.cols)
@@ -134,7 +141,7 @@ class Paint:
                 self.getcolpic()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                 self.tool += 1
-                if self.tool > 3:
+                if self.tool > len(tname) - 1:
                     self.tool = 0
                 self.title()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
