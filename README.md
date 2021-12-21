@@ -20,7 +20,7 @@ Requires PyGame and NumPy
 
 Paint with the left mouse button. Change active color with the mouse wheel
 (see colored square in top left corner). Switch to next tool with the
-right mouse button.
+right mouse button. Middle mouse button selects brush size.
 
 #### Keys
 

@@ -124,6 +124,9 @@ class Paint:
                 if event.button == 1:
                     self.mdown = True
                     self.lastpos = pygame.mouse.get_pos()
+                elif event.button == 2:
+                    self.small_brush = not self.small_brush
+                    self.title()
                 elif event.button == 3:
                     self.tool += 1
                     if self.tool > len(tname) - 1:
