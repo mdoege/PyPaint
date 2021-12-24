@@ -210,7 +210,8 @@ class Paint:
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
                     r = random.gauss(0, brsize)
-                    pygame.draw.rect(self.img, self.cols[self.col],
+                    if abs(r) <= 10 * AIRSIZE:
+                        pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
             elif self.tool == 3: # flood fill
