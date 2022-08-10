@@ -21,6 +21,18 @@ AIRSIZE = 4
 
 # color palettes in RGB hex:
 
+# primary colors
+cols_s = [
+0,
+0xffffff,
+0xff0000,
+0x00ff00,
+0x0000ff,
+0xffff00,
+0x00ffff,
+0xff00ff,
+]
+
 # GNOME
 cols_g = [
 0,
@@ -56,6 +68,11 @@ cols_p = [
 0xffccaa,
 ]
 
+# palettes and palette names
+palettes = cols_s, cols_g, cols_p
+palnames = "primary colors", "GNOME", "PICO-8"
+
+# tool names
 tname = "Dotted Freehand", "Continuous Freehand", "Airbrush", "Fill Tool"
 
 # modified version of code at
@@ -103,11 +120,12 @@ class Paint:
             self.img = pygame.Surface(RES)
             self.img.fill(0xffffff)
         self.mdown = False
-        self.cols = cols_g
+        self.palnum = 0
+        self.cols = palettes[self.palnum]
         self.col = 0
         self.colpic = pygame.Surface((50, 50))
         self.getcolpic()
-        self.tool = 0
+        self.tool = 1
         self.small_brush = False
         self.hide = False
         self.title()
@@ -140,8 +158,13 @@ class Paint:
                 self.col = self.col % len(self.cols)
                 self.getcolpic()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-                self.cols = cols_p
+                self.palnum += 1
+                if self.palnum >= len(palettes):
+                    self.palnum = 0
+                self.cols = palettes[self.palnum]
+                self.col = 0
                 self.getcolpic()
+                self.title()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                 self.tool += 1
                 if self.tool > len(tname) - 1:
@@ -185,7 +208,7 @@ class Paint:
             bb = ", large brush"
         if self.tool == 3:
             bb = ""
-        pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb})')
+        pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palnames[self.palnum]} palette)')
 
     def update(self):
         if self.mdown:

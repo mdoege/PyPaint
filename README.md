@@ -1,4 +1,4 @@
-![logo](https://github.com/mdoege/PyPaint/raw/master/logo.png "PyPaint logo")
+![logo](logo.png "PyPaint logo")
 
 ## PyPaint
 
@@ -10,7 +10,7 @@ Requires PyGame and NumPy
 
 * Fixed canvas size (1200x800 px)
 * Only four drawing tools: pen (dotted and continuous), airbrush, and fill
-* Palette of 10 colors (default) or 17 colors (PICO-8 palette + white)
+* Choice of three palettes
 * No undo (but you can overpaint in white)
 * No output filename or file format selection
 
@@ -24,7 +24,7 @@ right mouse button. Middle mouse button selects brush size.
 
 #### Keys
 
-**P**: Switch to PICO-8 ***p***alette
+**P**: Switch ***p***alette
 
 **T**: Switch drawing ***t***ools
 
