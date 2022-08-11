@@ -24,6 +24,10 @@ AIRSIZE = 4
 # primary colors
 cols_s = [
 0,
+0x404040,
+0x808080,
+0xb0b0b0,
+0xd0d0d0,
 0xffffff,
 0xff0000,
 0x00ff00,
