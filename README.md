@@ -30,7 +30,7 @@ right mouse button. Middle mouse button selects brush size.
 
 **B**: Toggle ***b***rush size
 
-**H**: ***H***ide active color indicator
+**H**: ***H***ide palette
 
 **C**: ***C***olor picker: get active color from pixel at mouse position
 (color is added to palette if necessary)
@@ -39,3 +39,6 @@ right mouse button. Middle mouse button selects brush size.
 
 **Return**: Save as PNG in current directory (Filename is date plus time.)
 
+### Screenshot
+
+![screenshot](screenshot.png "PyPaint screenshot")

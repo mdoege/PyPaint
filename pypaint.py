@@ -19,22 +19,46 @@ AIRDENS = 10
 # airbrush dot size
 AIRSIZE = 4
 
+# palette box size
+PALBW = 50
+
+# palette horizontal entries
+PALHE = 2
+
+# background color
+COLBG = 0x202020
+
 # color palettes in RGB hex:
 
-# primary colors
+# default colors
 cols_s = [
 0,
-0x404040,
+0x404040, # black, white, and grays
 0x808080,
 0xb0b0b0,
 0xd0d0d0,
 0xffffff,
-0xff0000,
+0xff0000, # full-intensity colors
+0xffb000,
 0x00ff00,
 0x0000ff,
 0xffff00,
 0x00ffff,
 0xff00ff,
+0xaa0000, # darker colors
+0x884000,
+0x00aa00,
+0x0000aa,
+0xaaaa00,
+0x00aaaa,
+0xaa00aa,
+0xff8080, # pastel colors
+0xffd080,
+0x80ff80,
+0x8080ff,
+0xffff80,
+0x80ffff,
+0xff80ff,
 ]
 
 # GNOME
@@ -72,9 +96,15 @@ cols_p = [
 0xffccaa,
 ]
 
+# Mostly empty palette (meant for picking colors from images)
+cols_pick = [
+0,
+0xffffff,
+]
+
 # palettes and palette names
-palettes = cols_s, cols_g, cols_p
-palnames = "primary colors", "GNOME", "PICO-8"
+palettes = cols_s, cols_g, cols_p, cols_pick
+palnames = "default", "GNOME", "PICO-8", "empty"
 
 # tool names
 tname = "Dotted Freehand", "Continuous Freehand", "Airbrush", "Fill Tool"
@@ -116,7 +146,7 @@ def fill(surface, position, fill_color):
 class Paint:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode(RES)
+        self.screen = pygame.display.set_mode((RES[0] + PALHE * PALBW, RES[1]))
         self.clock = pygame.time.Clock()
         if len(sys.argv) > 1:
             self.img = pygame.image.load(sys.argv[1]).convert()
@@ -127,10 +157,10 @@ class Paint:
         self.palnum = 0
         self.cols = palettes[self.palnum]
         self.col = 0
-        self.colpic = pygame.Surface((50, 50))
+        self.colpic = pygame.Surface((PALHE * PALBW, RES[1]))
         self.getcolpic()
         self.tool = 1
-        self.small_brush = False
+        self.small_brush = True
         self.hide = False
         self.title()
 
@@ -143,9 +173,19 @@ class Paint:
                 pygame.image.save(self.img,
                         time.strftime("%y%m%d_%H%M%S.png"))
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
+                if event.button == 1 and pygame.mouse.get_pos()[0] < RES[0]:
                     self.mdown = True
                     self.lastpos = pygame.mouse.get_pos()
+                elif event.button == 1 and not self.hide:
+                    xp, yp = pygame.mouse.get_pos()
+                    xp -= RES[0]
+                    xp = xp // PALBW
+                    yp = yp // PALBW
+                    v = RES[1] // PALBW
+                    c = v * xp + yp
+                    if c < len(self.cols):
+                        self.col = c
+                        self.getcolpic()
                 elif event.button == 2:
                     self.small_brush = not self.small_brush
                     self.title()
@@ -203,7 +243,21 @@ class Paint:
         pygame.quit()
 
     def getcolpic(self):
-        self.colpic.fill(self.cols[self.col])
+        self.colpic.fill(COLBG)
+        v = RES[1] // PALBW
+        for x in range(PALHE):
+            for y in range(v):
+                i = v * x + y
+                if i < len(self.cols):
+                    pygame.draw.rect(self.colpic, self.cols[i],
+                    [PALBW * x, PALBW * y, PALBW, PALBW])
+                if i == self.col:
+                    pygame.draw.rect(self.colpic, 0,
+                    [PALBW * x, PALBW * y, PALBW, PALBW],
+                    width = 2)
+                    pygame.draw.rect(self.colpic, "0xffffff",
+                    [PALBW * x + 2, PALBW * y + 2, PALBW - 4, PALBW - 4],
+                    width = 2)
 
     def title(self):
         if self.small_brush:
@@ -244,9 +298,10 @@ class Paint:
             elif self.tool == 3: # flood fill
                 fill(self.img, (x, y), self.cols[self.col])
 
+        self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))
         if not self.hide:
-            self.screen.blit(self.colpic, (0, 0))
+            self.screen.blit(self.colpic, (RES[0], 0))
         pygame.display.flip()
 
 c = Paint()
