@@ -9,7 +9,7 @@ Requires PyGame and NumPy (for the flood fill routine)
 ### Main features
 
 * Fixed canvas size (1200x800 px), but can load pictures in other (smaller) sizes
-* Four drawing tools: pen (dotted and continuous), airbrush, and flood fill
+* Drawing tools: pen (dotted and continuous), straight lines, airbrush, and flood fill
 * Several included palettes
 * Single-level undo
 * Saves files as PNG with automatic filename selection

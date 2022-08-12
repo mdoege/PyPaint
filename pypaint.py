@@ -107,7 +107,7 @@ palettes = cols_s, cols_g, cols_p, cols_pick
 palnames = "default", "GNOME", "PICO-8", "empty"
 
 # tool names
-tname = "dotted freehand", "continuous freehand", "airbrush", "fill tool"
+tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
 
 # modified version of code at
 # https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
@@ -162,6 +162,7 @@ class Paint:
         self.undo = [self.img.copy()]
         self.tool = 1
         self.small_brush = True
+        self.line_start = 0, 0
         self.hide = False
         self.title()
 
@@ -178,6 +179,8 @@ class Paint:
                 if event.button == 1 and pygame.mouse.get_pos()[0] < RES[0]:
                     self.mdown = True
                     self.lastpos = pygame.mouse.get_pos()
+                    if self.tool == 2:  # straight lines
+                        self.line_start = pygame.mouse.get_pos()
                 elif event.button == 1 and not self.hide:
                     xp, yp = pygame.mouse.get_pos()
                     xp -= RES[0]
@@ -199,6 +202,11 @@ class Paint:
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.mdown = False
+                    if self.tool == 2 and pygame.mouse.get_pos()[0] < RES[0]: # straight lines
+                        if self.small_brush: br = 4
+                        else: br = 14
+                        pygame.draw.line(self.img, self.cols[self.col],
+                            self.line_start, pygame.mouse.get_pos(), width = br)
                     self.undo.append(self.img.copy())
                     if len(self.undo) > 2:
                         self.undo = self.undo[-2:]
@@ -273,7 +281,7 @@ class Paint:
             bb = ", small brush"
         else:
             bb = ", large brush"
-        if self.tool == 3:
+        if self.tool == 4:  # flood fill
             bb = ""
         pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palnames[self.palnum]} palette)')
 
@@ -296,7 +304,7 @@ class Paint:
                     pygame.draw.rect(self.img, self.cols[self.col],
                         [xp - brsize // 2, yp - brsize // 2, brsize, brsize])
                 self.lastpos = x, y
-            elif self.tool == 2: # airbrush
+            elif self.tool == 3: # airbrush
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
                     r = random.gauss(0, brsize)
@@ -304,11 +312,14 @@ class Paint:
                         pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
-            elif self.tool == 3: # flood fill
+            elif self.tool == 4: # flood fill
                 fill(self.img, (x, y), self.cols[self.col])
 
         self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))
+        if self.tool == 2 and self.mdown: # straight lines
+            pygame.draw.line(self.screen, self.cols[self.col],
+                self.line_start, pygame.mouse.get_pos(), width = 2)
         if not self.hide:
             self.screen.blit(self.colpic, (RES[0], 0))
         pygame.display.flip()
