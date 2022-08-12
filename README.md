@@ -27,23 +27,20 @@ Requires PyGame and NumPy (for the flood fill routine)
 
 #### Keyboard
 
-**P**: Switch to different ***p***alette
-
-**T**: Switch drawing ***t***ool
-
-**B**: Toggle ***b***rush size (large/small)
-
-**U**: Undo last painting operation
-
-**H**: ***H***ide palette
-
-**C**: ***C***olor picker: gets active color from pixel at mouse position
+* **P**: Switch to different ***p***alette
+* **T**: Switch drawing ***t***ool
+* **B**: Toggle ***b***rush size (large/small)
+* **U**: ***U***ndo last painting operation
+* **H**: ***H***ide palette
+* **C**: ***C***olor picker: gets active color from pixel at mouse position
 (color is added to palette if necessary)
-
-**Space**: Erase drawing (can be undone)
-
-**Return**: Save as PNG in current directory (filename based on date and time)
+* **Space**: Erase drawing (can be undone)
+* **Return**: Save as PNG in current directory (filename based on date and time)
 
 ### Screenshot
 
 ![screenshot](screenshot.png "PyPaint screenshot")
+
+### License
+
+Public Domain / CC0
