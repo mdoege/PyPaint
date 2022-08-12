@@ -324,8 +324,10 @@ class Paint:
         self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))
         if self.tool == 2 and self.mdown: # straight lines
+            if self.small_brush: br = LSIZE_SMALL
+            else: br = LSIZE
             pygame.draw.line(self.screen, self.cols[self.col],
-                self.line_start, pygame.mouse.get_pos(), width = 2)
+                self.line_start, pygame.mouse.get_pos(), width = br)
         if not self.hide:
             self.screen.blit(self.colpic, (RES[0], 0))
         pygame.display.flip()
