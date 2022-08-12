@@ -11,6 +11,7 @@ Requires PyGame and NumPy (for the flood fill routine)
 * Fixed canvas size (1200x800 px), but can load pictures in other (smaller) sizes
 * Four drawing tools: pen (dotted and continuous), airbrush, and flood fill
 * Several included palettes
+* Single-level undo
 * Saves files as PNG with automatic filename selection
 
 ### Usage
@@ -31,6 +32,8 @@ Requires PyGame and NumPy (for the flood fill routine)
 **T**: Switch drawing ***t***ool
 
 **B**: Toggle ***b***rush size (large/small)
+
+**U**: Undo last painting operation
 
 **H**: ***H***ide palette
 

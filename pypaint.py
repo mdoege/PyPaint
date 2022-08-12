@@ -159,6 +159,7 @@ class Paint:
         self.col = 0
         self.colpic = pygame.Surface((PALHE * PALBW, RES[1]))
         self.getcolpic()
+        self.undo = [self.img.copy()]
         self.tool = 1
         self.small_brush = True
         self.hide = False
@@ -197,6 +198,9 @@ class Paint:
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.mdown = False
+                    self.undo.append(self.img.copy())
+                    if len(self.undo) > 2:
+                        self.undo = self.undo[-2:]
             if event.type == pygame.MOUSEWHEEL:
                 self.col -= event.y
                 self.col = self.col % len(self.cols)
@@ -219,6 +223,10 @@ class Paint:
                 self.title()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
                 self.hide = not self.hide
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_u:
+                if len(self.undo) >= 2:
+                    self.img = self.undo[-2].copy()
+                    self.undo = [self.img.copy()]
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 pos = pygame.mouse.get_pos()
                 c = self.img.get_at(pos)
