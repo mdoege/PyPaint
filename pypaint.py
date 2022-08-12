@@ -107,7 +107,7 @@ palettes = cols_s, cols_g, cols_p, cols_pick
 palnames = "default", "GNOME", "PICO-8", "empty"
 
 # tool names
-tname = "Dotted Freehand", "Continuous Freehand", "Airbrush", "Fill Tool"
+tname = "dotted freehand", "continuous freehand", "airbrush", "fill tool"
 
 # modified version of code at
 # https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
