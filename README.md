@@ -40,7 +40,7 @@ Requires PyGame and NumPy (for the flood fill routine)
 **C**: ***C***olor picker: gets active color from pixel at mouse position
 (color is added to palette if necessary)
 
-**Space**: Erase drawing
+**Space**: Erase drawing (can be undone)
 
 **Return**: Save as PNG in current directory (filename based on date and time)
 

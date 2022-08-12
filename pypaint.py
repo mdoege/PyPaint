@@ -169,6 +169,7 @@ class Paint:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.undo.append(self.img.copy())
                 self.img.fill(0xffffff)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 pygame.image.save(self.img,
