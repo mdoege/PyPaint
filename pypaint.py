@@ -7,11 +7,17 @@ import pygame, numpy, sys, time, random, math
 # canvas size
 RES = 1200, 800
 
-# brush size (normal)
+# brush size (large)
 BRUSH = 21
 
 # brush size (small)
 BRUSH_SMALL = 7
+
+# line size (large)
+LSIZE = 14
+
+# line size (small)
+LSIZE_SMALL = 4
 
 # airbrush density
 AIRDENS = 10
@@ -203,8 +209,8 @@ class Paint:
                 if event.button == 1:
                     self.mdown = False
                     if self.tool == 2 and pygame.mouse.get_pos()[0] < RES[0]: # straight lines
-                        if self.small_brush: br = 4
-                        else: br = 14
+                        if self.small_brush: br = LSIZE_SMALL
+                        else: br = LSIZE
                         pygame.draw.line(self.img, self.cols[self.col],
                             self.line_start, pygame.mouse.get_pos(), width = br)
                     self.undo.append(self.img.copy())
