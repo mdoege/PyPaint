@@ -281,13 +281,13 @@ class Paint:
                 if i == self.col:
                     pygame.draw.rect(self.colpic, 0,
                     [PALBW * x, PALBW * y, PALBW, PALBW],
-                    width = 4)
+                    width = 2)
                     pygame.draw.rect(self.colpic, "0xffffff",
-                    [PALBW * x + 4, PALBW * y + 4, PALBW - 8, PALBW - 8],
+                    [PALBW * x + 2, PALBW * y + 2, PALBW - 4, PALBW - 4],
                     width = 4)
                     pygame.draw.rect(self.colpic, 0,
-                    [PALBW * x + 8, PALBW * y + 8, PALBW - 16, PALBW - 16],
-                    width = 4)
+                    [PALBW * x + 6, PALBW * y + 6, PALBW - 12, PALBW - 12],
+                    width = 2)
 
     def title(self):
         if self.small_brush:
