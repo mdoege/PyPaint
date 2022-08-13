@@ -285,6 +285,9 @@ class Paint:
                     pygame.draw.rect(self.colpic, "0xffffff",
                     [PALBW * x + 4, PALBW * y + 4, PALBW - 8, PALBW - 8],
                     width = 4)
+                    pygame.draw.rect(self.colpic, 0,
+                    [PALBW * x + 8, PALBW * y + 8, PALBW - 16, PALBW - 16],
+                    width = 4)
 
     def title(self):
         if self.small_brush:
