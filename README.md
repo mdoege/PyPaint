@@ -1,6 +1,6 @@
-![logo](logo.png "PyPaint logo")
-
 ## PyPaint
+
+![screenshot](screenshot.png "PyPaint screenshot")
 
 A simple Python painting program for basic drawing and doodling. It is inspired by DeluxePaint and similar 1980s paint software.
 
@@ -36,10 +36,6 @@ Requires PyGame and NumPy (for the flood fill routine)
 (color is added to palette if necessary)
 * **Space**: Erase drawing (can be undone)
 * **Return**: Save as PNG in current directory (filename based on date and time)
-
-### Screenshot
-
-![screenshot](screenshot.png "PyPaint screenshot")
 
 ### License
 
