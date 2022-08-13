@@ -244,18 +244,22 @@ class Paint:
                     self.undo = [self.img.copy()]
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 pos = pygame.mouse.get_pos()
-                c = self.img.get_at(pos)
-                ch = c[0] * (256**2) + c[1] * 256 + c[2]
-                in_pal = False
-                for n, col in enumerate(self.cols):
-                    if ch == col:
-                        self.col = n
-                        in_pal = True
+                try:
+                    c = self.img.get_at(pos)
+                except:
+                    pass
+                else:
+                    ch = c[0] * (256**2) + c[1] * 256 + c[2]
+                    in_pal = False
+                    for n, col in enumerate(self.cols):
+                        if ch == col:
+                            self.col = n
+                            in_pal = True
+                            self.getcolpic()
+                    if not in_pal:
+                        self.cols.append(ch)
+                        self.col = len(self.cols) - 1
                         self.getcolpic()
-                if not in_pal:
-                    self.cols.append(ch)
-                    self.col = len(self.cols) - 1
-                    self.getcolpic()
 
     def run(self):
         self.running = True
