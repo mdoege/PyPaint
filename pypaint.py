@@ -2,7 +2,7 @@
 
 # Paint program
 
-import pygame, numpy, sys, time, random, math
+import pygame, numpy, os, sys, time, random, math
 
 # canvas size
 RES = 1200, 800
@@ -115,6 +115,15 @@ palnames = "default", "GNOME", "PICO-8", "empty"
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
 
+# icon images
+icons = []
+for n in range(5):
+    p = "%u.png" % n
+    img = pygame.image.load(os.path.join("img", p))
+    icons.append(img)
+brico_s = pygame.image.load(os.path.join("img", "brsmall.png"))
+brico_b = pygame.image.load(os.path.join("img", "brbig.png"))
+
 # modified version of code at
 # https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
 def fill(surface, position, fill_color):
@@ -190,13 +199,22 @@ class Paint:
                 elif event.button == 1 and not self.hide:
                     xp, yp = pygame.mouse.get_pos()
                     xp -= RES[0]
+                    yp -= 50
                     xp = xp // PALBW
                     yp = yp // PALBW
-                    v = RES[1] // PALBW
+                    v = RES[1] // PALBW - 1
                     c = v * xp + yp
-                    if c < len(self.cols):
+                    if yp >= 0 and c < len(self.cols):
                         self.col = c
                         self.getcolpic()
+                    if yp < 0 and xp == 0:
+                        self.small_brush = not self.small_brush
+                        self.title()
+                    if yp < 0 and xp == 1:
+                        self.tool += 1
+                        if self.tool > len(tname) - 1:
+                            self.tool = 0
+                        self.title()
                 elif event.button == 2:
                     self.small_brush = not self.small_brush
                     self.title()
@@ -271,7 +289,7 @@ class Paint:
 
     def getcolpic(self):
         self.colpic.fill(COLBG)
-        v = RES[1] // PALBW
+        v = RES[1] // PALBW - 1
         for x in range(PALHE):
             for y in range(v):
                 i = v * x + y
@@ -336,7 +354,12 @@ class Paint:
             pygame.draw.line(self.screen, self.cols[self.col],
                 self.line_start, pygame.mouse.get_pos(), width = br)
         if not self.hide:
-            self.screen.blit(self.colpic, (RES[0], 0))
+            self.screen.blit(self.colpic, (RES[0], 50))
+        self.screen.blit(icons[self.tool], (RES[0] + 50, 0))
+        if self.small_brush:
+            self.screen.blit(brico_s, (RES[0], 0))
+        else:
+            self.screen.blit(brico_b, (RES[0], 0))
         pygame.display.flip()
 
 c = Paint()
