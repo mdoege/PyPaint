@@ -102,6 +102,41 @@ cols_p = [
 0xffccaa,
 ]
 
+# DPaint
+cols_d = [
+0,
+0xffffff,
+0xee0000,
+0xaa0000,
+0xdd8800,
+0xffee00,
+0x88ff00,
+0x008800,
+0x00bb66,
+0x00dddd,
+0x00aaff,
+0x0077cc,
+0x0000ff,
+0x7700ff,
+0xcc00ee,
+0xcc0088,
+0x662200,
+0xee5522,
+0xaa5522,
+0xffccaa,
+0x333333,
+0x444444,
+0x555555,
+0x666666,
+0x777777,
+0x888888,
+0x999999,
+0xaaaaaa,
+0xcccccc,
+0xdddddd,
+0xeeeeee,
+]
+
 # Mostly empty palette (meant for picking colors from images)
 cols_pick = [
 0,
@@ -109,8 +144,8 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes = cols_s, cols_g, cols_p, cols_pick
-palnames = "default", "GNOME", "PICO-8", "empty"
+palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_pick
+palnames = "default", "GNOME", "PICO-8", "DPaint", "empty"
 
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
