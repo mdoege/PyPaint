@@ -165,6 +165,19 @@ class Paint:
         self.clock = pygame.time.Clock()
         if len(sys.argv) > 1:
             self.img = pygame.image.load(sys.argv[1]).convert()
+            w, h = self.img.get_size()
+            if w > RES[0] or h > RES[1]:
+                asp_can = RES[0] / RES[1]
+                asp_img = w / h
+
+                # scale to fit canvas
+                if asp_img > asp_can:
+                    w = RES[0]
+                    h = RES[0] / asp_img
+                else:
+                    w = RES[1] * asp_img
+                    h = RES[1]
+                self.img = pygame.transform.smoothscale(self.img, (w, h))
         else:
             self.img = pygame.Surface(RES)
             self.img.fill(0xffffff)
