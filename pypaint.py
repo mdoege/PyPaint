@@ -140,6 +140,38 @@ cols_d = [
 0xffffff,
 ]
 
+# MS Paint classic
+cols_msp = [
+0xffffff,
+0,
+0xc0c0c0,
+0x808080,
+0xff0000,
+0x800000,
+0xffff00,
+0x808000,
+0x00ff00,
+0x008000,
+0x00ffff,
+0x008080,
+0x0000ff,
+0x000080,
+0xff00ff,
+0x800080,
+0xffff80,
+0x808040,
+0x00ff80,
+0x004040,
+0x80ffff,
+0x0080ff,
+0x8080ff,
+0x004080,
+0xff0080,
+0x400080,
+0xff8040,
+0x804000,
+]
+
 # Mostly empty palette (meant for picking colors from images)
 cols_pick = [
 0,
@@ -147,8 +179,8 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_pick
-palnames = "default", "GNOME", "PICO-8", "DPaint", "empty"
+palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_msp,   cols_pick
+palnames = "default", "GNOME", "PICO-8", "DPaint", "MS Paint", "empty"
 
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
