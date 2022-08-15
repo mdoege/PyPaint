@@ -28,8 +28,8 @@ AIRSIZE = 4
 # palette box size
 PALBW = 50
 
-# palette horizontal entries
-PALHE = 2
+# palette columns
+PALHE = 3
 
 # background color
 COLBG = 0x202020
@@ -40,7 +40,9 @@ COLBG = 0x202020
 cols_s = [
 0,
 0x404040, # black, white, and grays
+0x606060,
 0x808080,
+0xa0a0a0,
 0xb0b0b0,
 0xd0d0d0,
 0xffffff,
@@ -105,7 +107,7 @@ cols_p = [
 # DPaint
 cols_d = [
 0,
-0xffffff,
+0xa0a0a0,
 0xee0000,
 0xaa0000,
 0xdd8800,
@@ -135,6 +137,7 @@ cols_d = [
 0xcccccc,
 0xdddddd,
 0xeeeeee,
+0xffffff,
 ]
 
 # Mostly empty palette (meant for picking colors from images)
@@ -158,6 +161,7 @@ for n in range(5):
     icons.append(img)
 brico_s = pygame.image.load(os.path.join("img", "brsmall.png"))
 brico_b = pygame.image.load(os.path.join("img", "brbig.png"))
+b_undo  = pygame.image.load(os.path.join("img", "undo.png"))
 
 # modified version of code at
 # https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
@@ -263,6 +267,10 @@ class Paint:
                         if self.tool > len(tname) - 1:
                             self.tool = 0
                         self.title()
+                    if yp < 0 and xp == 2:
+                        if len(self.undo) >= 2:
+                            self.img = self.undo[-2].copy()
+                            self.undo = [self.undo[-1], self.undo[-2]]
                 elif event.button == 2:
                     self.small_brush = not self.small_brush
                     self.title()
@@ -279,9 +287,10 @@ class Paint:
                         else: br = LSIZE
                         pygame.draw.line(self.img, self.cols[self.col],
                             self.line_start, pygame.mouse.get_pos(), width = br)
-                    self.undo.append(self.img.copy())
-                    if len(self.undo) > 2:
-                        self.undo = self.undo[-2:]
+                    if pygame.mouse.get_pos()[0] < self.img.get_size()[0]:
+                        self.undo.append(self.img.copy())
+                        if len(self.undo) > 2:
+                            self.undo = self.undo[-2:]
             if event.type == pygame.MOUSEWHEEL:
                 self.col -= event.y
                 self.col = self.col % len(self.cols)
@@ -403,11 +412,12 @@ class Paint:
                 self.line_start, pygame.mouse.get_pos(), width = br)
         if not self.hide:
             self.screen.blit(self.colpic, (RES[0], 50))
-        self.screen.blit(icons[self.tool], (RES[0] + 50, 0))
-        if self.small_brush:
-            self.screen.blit(brico_s, (RES[0], 0))
-        else:
-            self.screen.blit(brico_b, (RES[0], 0))
+            self.screen.blit(icons[self.tool], (RES[0] + 50, 0))
+            self.screen.blit(b_undo, (RES[0] + 100, 0))
+            if self.small_brush:
+                self.screen.blit(brico_s, (RES[0], 0))
+            else:
+                self.screen.blit(brico_b, (RES[0], 0))
         pygame.display.flip()
 
 c = Paint()
