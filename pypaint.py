@@ -307,7 +307,7 @@ class Paint:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_u:
                 if len(self.undo) >= 2:
                     self.img = self.undo[-2].copy()
-                    self.undo = [self.img.copy()]
+                    self.undo = [self.undo[-1], self.undo[-2]]
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 pos = pygame.mouse.get_pos()
                 try:
