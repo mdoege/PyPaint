@@ -172,6 +172,44 @@ cols_msp = [
 0x804000,
 ]
 
+# Pinta
+cols_pt = [
+0xffffff,
+0x000000,
+0xa0a0a0,
+0x808080,
+0x404040,
+0x303030,
+0xff0000,
+0xff7f7f,
+0xff6a00,
+0xffb27f,
+0xffd800,
+0xffe97f,
+0xb6ff00,
+0xdaff7f,
+0x4cff00,
+0xa5ff7f,
+0x00ff21,
+0x7fff8e,
+0x00ff90,
+0x7fffc5,
+0x00ffff,
+0x7fffff,
+0x0094ff,
+0x7fc9ff,
+0x0026ff,
+0x7f92ff,
+0x4800ff,
+0xa17fff,
+0xb200ff,
+0xd67fff,
+0xff00dc,
+0xff7fed,
+0xff006e,
+0xff7fb6,
+]
+
 # Mostly empty palette (meant for picking colors from images)
 cols_pick = [
 0,
@@ -179,8 +217,8 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_msp,   cols_pick
-palnames = "default", "GNOME", "PICO-8", "DPaint", "MS Paint", "empty"
+palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_msp,   cols_pt, cols_pick
+palnames = "default", "GNOME", "PICO-8", "DPaint", "MS Paint", "Pinta", "empty"
 
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
