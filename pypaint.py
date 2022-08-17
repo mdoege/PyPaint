@@ -237,8 +237,16 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes =  cols_s,    cols_g,  cols_p,   cols_d,        cols_msp,   cols_pt, cols_sp,      cols_pick
-palnames = "default", "GNOME", "PICO-8", "DeluxePaint", "MS Paint", "Pinta", "SuperPaint", "empty"
+palettes =  [
+(cols_s,    "default"),
+(cols_g,    "GNOME"),
+(cols_p,    "PICO-8"),
+(cols_d,    "DeluxePaint"),
+(cols_msp,  "MS Paint"),
+(cols_pt,   "Pinta"),
+(cols_sp,   "SuperPaint"),
+(cols_pick, "empty"),
+]
 
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
@@ -312,7 +320,7 @@ class Paint:
             self.img.fill(0xffffff)
         self.mdown = False
         self.palnum = 0
-        self.cols = palettes[self.palnum]
+        self.cols = palettes[self.palnum][0]
         self.col = 0
         self.colpic = pygame.Surface((PALHE * PALBW, RES[1]))
         self.getcolpic()
@@ -389,7 +397,7 @@ class Paint:
                 self.palnum += 1
                 if self.palnum >= len(palettes):
                     self.palnum = 0
-                self.cols = palettes[self.palnum]
+                self.cols = palettes[self.palnum][0]
                 self.col = 0
                 self.getcolpic()
                 self.title()
@@ -461,7 +469,7 @@ class Paint:
             bb = ", large brush"
         if self.tool == 4:  # flood fill
             bb = ""
-        pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palnames[self.palnum]} palette)')
+        pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palettes[self.palnum][1]} palette)')
 
     def update(self):
         if self.mdown:
