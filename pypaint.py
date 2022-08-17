@@ -210,6 +210,26 @@ cols_pt = [
 0xff7fb6,
 ]
 
+# SuperPaint (Richard Shoup)
+cols_sp = [
+0xe0e0e0,
+0,
+0xe00300,
+0x00e003,
+0x0300e0,
+0xe08d00,
+0xe000e0,
+0x404040,
+0x808080,
+0xc0c0c0,
+0xe0ae53,
+0x70a8e0,
+0x6fe078,
+0xe0846f,
+0xbf8500,
+0xdfdf00,
+]
+
 # Mostly empty palette (meant for picking colors from images)
 cols_pick = [
 0,
@@ -217,8 +237,8 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_msp,   cols_pt, cols_pick
-palnames = "default", "GNOME", "PICO-8", "DPaint", "MS Paint", "Pinta", "empty"
+palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_msp,   cols_pt, cols_sp,      cols_pick
+palnames = "default", "GNOME", "PICO-8", "DPaint", "MS Paint", "Pinta", "SuperPaint", "empty"
 
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
