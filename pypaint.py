@@ -19,6 +19,9 @@ LSIZE = 14
 # line size (small)
 LSIZE_SMALL = 4
 
+# number of points for Bézier curve
+BEZSEG = 100
+
 # airbrush density
 AIRDENS = 10
 
@@ -311,6 +314,19 @@ def fill(surface, position, fill_color):
 
     del surf_array
 
+def bezier(surf, col, br, pos):
+    "Draw a quadratic Bézier curve to surface"
+    a, c, b = pos
+    poi = []
+    for tt in range(0, BEZSEG + 1):
+        t = tt / BEZSEG
+        # http://blog.pkh.me/p/33-deconstructing-be%CC%81zier-curves.html
+        xp = (1-t)**2 * a[0] + 2*(1-t)*t * b[0] + t**2 * c[0]
+        yp = (1-t)**2 * a[1] + 2*(1-t)*t * b[1] + t**2 * c[1]
+        poi.append((xp, yp))
+    for n in range(len(poi) - 1):
+        pygame.draw.line(surf, col, poi[n], poi[n+1], width = br)
+
 class Paint:
     def __init__(self):
         pygame.init()
@@ -363,6 +379,13 @@ class Paint:
                     self.lastpos = pygame.mouse.get_pos()
                     if self.tool == T_STR:  # straight lines
                         self.line_start = pygame.mouse.get_pos()
+                    if self.tool == T_CUR and len(self.bezier) == 0: # curves
+                        self.bezier = [pygame.mouse.get_pos()]
+                    if self.tool == T_CUR and len(self.bezier) == 2: # curves
+                        if self.small_brush: br = LSIZE_SMALL
+                        else: br = LSIZE
+                        bezier(self.img, self.cols[self.col], br, self.bezier + [pygame.mouse.get_pos()])
+                        self.bezier = []
                 elif event.button == 1 and not self.hide:
                     xp, yp = pygame.mouse.get_pos()
                     xp -= RES[0]
@@ -405,6 +428,8 @@ class Paint:
                         else: br = LSIZE
                         pygame.draw.line(self.img, self.cols[self.col],
                             self.line_start, pygame.mouse.get_pos(), width = br)
+                    if self.tool == T_CUR and pygame.mouse.get_pos()[0] < RES[0] and len(self.bezier) == 1: # curves
+                        self.bezier.append(pygame.mouse.get_pos())
                     if pygame.mouse.get_pos()[0] < self.img.get_size()[0]:
                         self.undo.append(self.img.copy())
                         if len(self.undo) > 2:
@@ -530,6 +555,17 @@ class Paint:
             else: br = LSIZE
             pygame.draw.line(self.screen, self.cols[self.col],
                 self.line_start, pygame.mouse.get_pos(), width = br)
+
+        if self.tool == T_CUR and len(self.bezier) == 1: # curves
+            if self.small_brush: br = LSIZE_SMALL
+            else: br = LSIZE
+            pygame.draw.line(self.screen, self.cols[self.col],
+                self.bezier[0], pygame.mouse.get_pos(), width = br)
+
+        if self.tool == T_CUR and len(self.bezier) == 2: # curves
+            if self.small_brush: br = LSIZE_SMALL
+            else: br = LSIZE
+            bezier(self.screen, self.cols[self.col], br, self.bezier + [pygame.mouse.get_pos()])
         if not self.hide:
             self.screen.blit(self.colpic, (RES[0], 50))
             self.screen.blit(icons[self.tool], (RES[0] + 50, 0))
