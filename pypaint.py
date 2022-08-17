@@ -257,6 +257,12 @@ tname = [
 "fill tool",
 ]
 
+T_DOT = 0
+T_CON = 1
+T_STR = 2
+T_AIR = 3
+T_FIL = 4
+
 # icon images
 icons = []
 for n in range(5):
@@ -331,9 +337,10 @@ class Paint:
         self.colpic = pygame.Surface((PALHE * PALBW, RES[1]))
         self.getcolpic()
         self.undo = [self.img.copy()]
-        self.tool = 1
+        self.tool = T_CON
         self.small_brush = True
         self.line_start = 0, 0
+        self.bezier = []
         self.hide = False
         self.title()
 
@@ -350,7 +357,7 @@ class Paint:
                 if event.button == 1 and pygame.mouse.get_pos()[0] < RES[0]:
                     self.mdown = True
                     self.lastpos = pygame.mouse.get_pos()
-                    if self.tool == 2:  # straight lines
+                    if self.tool == T_STR:  # straight lines
                         self.line_start = pygame.mouse.get_pos()
                 elif event.button == 1 and not self.hide:
                     xp, yp = pygame.mouse.get_pos()
@@ -383,10 +390,13 @@ class Paint:
                     if self.tool > len(tname) - 1:
                         self.tool = 0
                     self.title()
+                    self.line_start = 0, 0
+                    self.bezier = []
+
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.mdown = False
-                    if self.tool == 2 and pygame.mouse.get_pos()[0] < RES[0]: # straight lines
+                    if self.tool == T_STR and pygame.mouse.get_pos()[0] < RES[0]: # straight lines
                         if self.small_brush: br = LSIZE_SMALL
                         else: br = LSIZE
                         pygame.draw.line(self.img, self.cols[self.col],
@@ -412,6 +422,8 @@ class Paint:
                 if self.tool > len(tname) - 1:
                     self.tool = 0
                 self.title()
+                self.line_start = 0, 0
+                self.bezier = []
             if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
                 self.small_brush = not self.small_brush
                 self.title()
@@ -473,7 +485,7 @@ class Paint:
             bb = ", small brush"
         else:
             bb = ", large brush"
-        if self.tool == 4:  # flood fill
+        if self.tool == T_FIL:  # flood fill
             bb = ""
         pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palettes[self.palnum][1]} palette)')
 
@@ -484,10 +496,10 @@ class Paint:
             else:
                 brsize = BRUSH
             x, y = pygame.mouse.get_pos()
-            if self.tool == 0:   # pen (aka dotted freehand in Deluxe Paint)
+            if self.tool == T_DOT: # pen (aka dotted freehand in Deluxe Paint)
                 pygame.draw.rect(self.img, self.cols[self.col],
                     [x - brsize // 2, y - brsize // 2, brsize, brsize])
-            elif self.tool == 1: # pen (lines)
+            elif self.tool == T_CON: # pen (lines)
                 steps = max(1, abs(x - self.lastpos[0]),
                         abs(y - self.lastpos[1]))
                 for n in range(steps):
@@ -496,7 +508,7 @@ class Paint:
                     pygame.draw.rect(self.img, self.cols[self.col],
                         [xp - brsize // 2, yp - brsize // 2, brsize, brsize])
                 self.lastpos = x, y
-            elif self.tool == 3: # airbrush
+            elif self.tool == T_AIR: # airbrush
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
                     r = random.gauss(0, brsize)
@@ -504,12 +516,12 @@ class Paint:
                         pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
-            elif self.tool == 4: # flood fill
+            elif self.tool == T_FIL: # flood fill
                 fill(self.img, (x, y), self.cols[self.col])
 
         self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))
-        if self.tool == 2 and self.mdown: # straight lines
+        if self.tool == T_STR and self.mdown: # straight lines
             if self.small_brush: br = LSIZE_SMALL
             else: br = LSIZE
             pygame.draw.line(self.screen, self.cols[self.col],
