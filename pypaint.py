@@ -237,7 +237,7 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes =  [
+palettes = [
 (cols_s,    "default"),
 (cols_g,    "GNOME"),
 (cols_p,    "PICO-8"),
@@ -249,7 +249,13 @@ palettes =  [
 ]
 
 # tool names
-tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
+tname = [
+"dotted freehand",
+"continuous freehand",
+"straight lines",
+"airbrush",
+"fill tool",
+]
 
 # icon images
 icons = []
