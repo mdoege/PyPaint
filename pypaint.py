@@ -104,7 +104,7 @@ cols_p = [
 0xffccaa,
 ]
 
-# DPaint
+# DeluxePaint (Dan Silva)
 cols_d = [
 0,
 0xa0a0a0,
@@ -175,7 +175,7 @@ cols_msp = [
 # Pinta
 cols_pt = [
 0xffffff,
-0x000000,
+0,
 0xa0a0a0,
 0x808080,
 0x404040,
@@ -237,8 +237,8 @@ cols_pick = [
 ]
 
 # palettes and palette names
-palettes =  cols_s,    cols_g,  cols_p,   cols_d,   cols_msp,   cols_pt, cols_sp,      cols_pick
-palnames = "default", "GNOME", "PICO-8", "DPaint", "MS Paint", "Pinta", "SuperPaint", "empty"
+palettes =  cols_s,    cols_g,  cols_p,   cols_d,        cols_msp,   cols_pt, cols_sp,      cols_pick
+palnames = "default", "GNOME", "PICO-8", "DeluxePaint", "MS Paint", "Pinta", "SuperPaint", "empty"
 
 # tool names
 tname = "dotted freehand", "continuous freehand", "straight lines", "airbrush", "fill tool"
