@@ -253,6 +253,7 @@ tname = [
 "dotted freehand",
 "continuous freehand",
 "straight lines",
+"curves",
 "airbrush",
 "fill tool",
 ]
@@ -260,13 +261,16 @@ tname = [
 T_DOT = 0
 T_CON = 1
 T_STR = 2
-T_AIR = 3
-T_FIL = 4
+T_CUR = 3
+T_AIR = 4
+T_FIL = 5
+
+T_ALL = "dot", "con", "str", "cur", "air", "fil"
 
 # icon images
 icons = []
-for n in range(5):
-    p = "%u.png" % n
+for n in T_ALL:
+    p = "t_%s.png" % n
     img = pygame.image.load(os.path.join("img", p))
     icons.append(img)
 brico_s = pygame.image.load(os.path.join("img", "brsmall.png"))
