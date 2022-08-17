@@ -4,7 +4,7 @@
 
 A simple Python painting program for basic drawing and doodling. It is inspired by DeluxePaint and similar 1980s paint software.
 
-Requires PyGame and NumPy (for the flood fill routine)
+Requires PyGame
 
 ### Main features
 

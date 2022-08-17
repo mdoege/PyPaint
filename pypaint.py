@@ -2,7 +2,7 @@
 
 # Paint program
 
-import pygame, numpy, os, sys, time, random, math
+import pygame, os, sys, time, random, math
 
 # canvas size
 RES = 1200, 800
@@ -27,6 +27,9 @@ AIRDENS = 10
 
 # airbrush dot size
 AIRSIZE = 4
+
+# flood fill speed (lines per frame)
+FILL_SPEED = 100
 
 # palette box size
 PALBW = 50
@@ -280,39 +283,57 @@ brico_s = pygame.image.load(os.path.join("img", "brsmall.png"))
 brico_b = pygame.image.load(os.path.join("img", "brbig.png"))
 b_undo  = pygame.image.load(os.path.join("img", "undo.png"))
 
-# modified version of code at
-# https://stackoverflow.com/questions/41656764/how-to-implement-flood-fill-in-a-pygame-surface
-def fill(surface, position, fill_color):
-    w, h = surface.get_size()
-    surf_array = pygame.surfarray.pixels2d(surface)
-    orig = surf_array[position]
-    grid = numpy.zeros((w, h), dtype = int)
-    grid[:,:] = 1
-    frontier = [position]
-    while len(frontier) > 0:
-        # protect against out of memory errors due to runaway filling:
-        if len(frontier) > w * h:
-            print("STOP FILL")
-            pygame.surfarray.blit_array(surface, surf_array)
-            del surf_array
-            return
-        x, y = frontier.pop()
-        surf_array[x, y] = fill_color
-        grid[x,y] = 0
-        if x < w - 1 and surf_array[x + 1, y] == orig and grid[x + 1, y]:
-            frontier.append((x + 1, y))
-            grid[x + 1, y] = 0
-        if x > 0 and surf_array[x - 1, y] == orig and grid[x - 1, y]:
-            frontier.append((x - 1, y))
-            grid[x - 1, y] = 0
-        if y < h - 1 and surf_array[x, y + 1] == orig and grid[x, y + 1]:
-            frontier.append((x, y + 1))
-            grid[x, y + 1] = 0
-        if y > 0 and surf_array[x, y - 1] == orig and grid[x, y - 1]:
-            frontier.append((x, y - 1))
-            grid[x, y - 1] = 0
+def get_top(ca, orig, ys):
+    for y in range(ys - 1, -1, -1):
+        if ca[y] != orig:
+            return y + 1
+    return 0
 
-    del surf_array
+def get_bot(ca, orig, ys):
+    for y in range(ys + 1, len(ca)):
+        if ca[y] != orig:
+            return y - 1
+    return len(ca) - 1
+
+# list of flood fill regions left to process
+ra = []
+
+def fill2(surf, p, col):
+    "Start flood fill at pos p"
+    global ra
+
+    orig = surf.get_at(p)
+    # check if target pixel already has the chosen color
+    if col == 256**2 * orig[0] + 256 * orig[1] + orig[2]:
+        return
+
+    ca = [surf.get_at((p[0], y)) for y in range(surf.get_height())]
+    top, bot = get_top(ca, orig, p[1]), get_bot(ca, orig, p[1])
+    ra.append((p[0], top, bot,  1, orig, col))
+    ra.append((p[0], top, bot, -1, orig, col))
+    pygame.draw.line(surf, col, (p[0], top), (p[0], bot))
+
+def do_fill(surf):
+    "Perform a flood fill step"
+    if not ra:
+        return
+    x, top, bot, di, orig, col = ra.pop(0)
+    x += di
+    if x < 0 or x >= surf.get_width():
+        return
+    cr = [surf.get_at((x, y)) for y in range(surf.get_height())]
+    lastbot = -1
+
+    for y in range(top, bot + 1):
+        if cr[y] != orig or y <= lastbot:
+            continue
+        top2, bot2 = get_top(cr, orig, y), get_bot(cr, orig, y)
+        if bot2 == lastbot:
+            continue
+        lastbot = bot2
+        ra.append((x, top2, bot2,  di, orig, col))
+        pygame.draw.line(surf, col, (x, top2), (x, bot2))
+        ra.append((x, top2, bot2, -di, orig, col))
 
 def bezier(surf, col, br, pos):
     "Draw a quadratic Bézier curve to surface"
@@ -386,6 +407,9 @@ class Paint:
                         else: br = LSIZE
                         bezier(self.img, self.cols[self.col], br, self.bezier + [pygame.mouse.get_pos()])
                         self.bezier = []
+                    if self.tool == T_FIL and not ra: # flood fill
+                        fill2(self.img, pygame.mouse.get_pos(), self.cols[self.col])
+
                 elif event.button == 1 and not self.hide:
                     xp, yp = pygame.mouse.get_pos()
                     xp -= RES[0]
@@ -545,8 +569,6 @@ class Paint:
                         pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
-            elif self.tool == T_FIL: # flood fill
-                fill(self.img, (x, y), self.cols[self.col])
 
         self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))
@@ -566,6 +588,11 @@ class Paint:
             if self.small_brush: br = LSIZE_SMALL
             else: br = LSIZE
             bezier(self.screen, self.cols[self.col], br, self.bezier + [pygame.mouse.get_pos()])
+
+        if ra:
+            for q in range(FILL_SPEED):
+                do_fill(self.img)
+
         if not self.hide:
             self.screen.blit(self.colpic, (RES[0], 50))
             self.screen.blit(icons[self.tool], (RES[0] + 50, 0))
