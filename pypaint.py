@@ -37,6 +37,12 @@ PALBW = 50
 # palette columns
 PALHE = 3
 
+# palette rows
+PALROWS = RES[1] // PALBW - 3
+
+# toolbox pixel height
+TOOL_HEIGHT = 3 * 50
+
 # background color
 COLBG = 0x202020
 
@@ -273,15 +279,26 @@ T_FIL = 5
 
 T_ALL = "dot", "con", "str", "cur", "air", "fil"
 
-# icon images
+# load icon images
 icons = []
+icons_dark = []
 for n in T_ALL:
     p = "t_%s.png" % n
     img = pygame.image.load(os.path.join("img", p))
     icons.append(img)
+    img2 = img.copy()
+    for y in range(7, 43):
+        for x in range(7, 43):
+            if img2.get_at((x, y))[0] > 100:
+                img2.set_at((x, y), (0, 0, 0))
+            else:
+                img2.set_at((x, y), (170, 170, 170))
+    icons_dark.append(img2)
+
 brico_s = pygame.image.load(os.path.join("img", "brsmall.png"))
 brico_b = pygame.image.load(os.path.join("img", "brbig.png"))
 b_undo  = pygame.image.load(os.path.join("img", "undo.png"))
+b_clear = pygame.image.load(os.path.join("img", "clear.png"))
 
 def get_top(ca, orig, ys):
     for y in range(ys - 1, -1, -1):
@@ -348,6 +365,13 @@ def bezier(surf, col, br, pos):
     for n in range(len(poi) - 1):
         pygame.draw.line(surf, col, poi[n], poi[n+1], width = br)
 
+def is_act(a, b):
+    "Is this the active tool?"
+    if a == b:
+        return icons_dark[a]
+    else:
+        return icons[a]
+
 class Paint:
     def __init__(self):
         pygame.init()
@@ -375,7 +399,7 @@ class Paint:
         self.palnum = 0
         self.cols = palettes[self.palnum][0]
         self.col = 0
-        self.colpic = pygame.Surface((PALHE * PALBW, RES[1]))
+        self.colpic = pygame.Surface((PALHE * PALBW, RES[1] - TOOL_HEIGHT))
         self.getcolpic()
         self.undo = [self.img.copy()]
         self.tool = T_CON
@@ -413,26 +437,47 @@ class Paint:
                 elif event.button == 1 and not self.hide:
                     xp, yp = pygame.mouse.get_pos()
                     xp -= RES[0]
-                    yp -= 50
+                    yp -= TOOL_HEIGHT
                     xp = xp // PALBW
                     yp = yp // PALBW
-                    v = RES[1] // PALBW - 1
-                    c = v * xp + yp
+                    c = PALROWS * xp + yp
                     if yp >= 0 and c < len(self.cols):
                         self.col = c
                         self.getcolpic()
-                    if yp < 0 and xp == 0:
+
+                    if yp == -3 and xp == 0:    # brush size
                         self.small_brush = not self.small_brush
                         self.title()
-                    if yp < 0 and xp == 1:
-                        self.tool += 1
-                        if self.tool > len(tname) - 1:
-                            self.tool = 0
-                        self.title()
-                    if yp < 0 and xp == 2:
+                    if yp == -3 and xp == 1:    # undo
                         if len(self.undo) >= 2:
                             self.img = self.undo[-2].copy()
                             self.undo = [self.undo[-1], self.undo[-2]]
+                    if yp == -3 and xp == 2:    # clear
+                        self.undo.append(self.img.copy())
+                        self.img.fill(0xffffff)
+
+                    if yp == -2 and xp == 0:
+                        self.tool = 0
+                        self.title()
+                    if yp == -2 and xp == 1:
+                        self.tool = 1
+                        self.title()
+                    if yp == -2 and xp == 2:
+                        self.tool = 2
+                        self.line_start = 0, 0
+                        self.title()
+
+                    if yp == -1 and xp == 0:
+                        self.tool = 3
+                        self.bezier = []
+                        self.title()
+                    if yp == -1 and xp == 1:
+                        self.tool = 4
+                        self.title()
+                    if yp == -1 and xp == 2:
+                        self.tool = 5
+                        self.title()
+
                 elif event.button == 2:
                     self.small_brush = not self.small_brush
                     self.title()
@@ -514,11 +559,11 @@ class Paint:
         pygame.quit()
 
     def getcolpic(self):
+        "Draw palette surface"
         self.colpic.fill(COLBG)
-        v = RES[1] // PALBW - 1
         for x in range(PALHE):
-            for y in range(v):
-                i = v * x + y
+            for y in range(PALROWS):
+                i = PALROWS * x + y
                 if i < len(self.cols):
                     pygame.draw.rect(self.colpic, self.cols[i],
                     [PALBW * x, PALBW * y, PALBW, PALBW])
@@ -572,6 +617,8 @@ class Paint:
 
         self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))
+
+        # draw tool previews
         if self.tool == T_STR and self.mdown: # straight lines
             if self.small_brush: br = LSIZE_SMALL
             else: br = LSIZE
@@ -589,18 +636,29 @@ class Paint:
             else: br = LSIZE
             bezier(self.screen, self.cols[self.col], br, self.bezier + [pygame.mouse.get_pos()])
 
+        # do flood fill steps if necessary
         if ra:
             for q in range(FILL_SPEED):
                 do_fill(self.img)
 
+        # draw toolbox
         if not self.hide:
-            self.screen.blit(self.colpic, (RES[0], 50))
-            self.screen.blit(icons[self.tool], (RES[0] + 50, 0))
-            self.screen.blit(b_undo, (RES[0] + 100, 0))
             if self.small_brush:
                 self.screen.blit(brico_s, (RES[0], 0))
             else:
                 self.screen.blit(brico_b, (RES[0], 0))
+            self.screen.blit(b_undo, (RES[0] + 50, 0))
+            self.screen.blit(b_clear, (RES[0] + 100, 0))
+
+            self.screen.blit(is_act(0, self.tool), (RES[0], 50))
+            self.screen.blit(is_act(1, self.tool), (RES[0] + 50, 50))
+            self.screen.blit(is_act(2, self.tool), (RES[0] + 100, 50))
+
+            self.screen.blit(is_act(3, self.tool), (RES[0], 100))
+            self.screen.blit(is_act(4, self.tool), (RES[0] + 50, 100))
+            self.screen.blit(is_act(5, self.tool), (RES[0] + 100, 100))
+
+            self.screen.blit(self.colpic, (RES[0], 150))
         pygame.display.flip()
 
 c = Paint()
