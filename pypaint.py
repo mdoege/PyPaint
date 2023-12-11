@@ -242,6 +242,46 @@ cols_sp = [
 0xdfdf00,
 ]
 
+# Minecraft dyes (before 1.12) from https://minecraft.wiki/w/Dyeing
+cols_mc1 = [
+0xFFFFFF,
+0x999999,
+0x4C4C4C,
+0x191919,
+0x664C33,
+0x993333,
+0xD87F33,
+0xE5E533,
+0x7FCC19,
+0x667F33,
+0x4C7F99,
+0x6699D8,
+0x334CB2,
+0x7F3FB2,
+0xB24CD8,
+0xF27FA5,
+]
+
+# current Minecraft dyes from https://minecraft.wiki/w/Dyeing#Color_values
+cols_mc2 = [
+0xF9FFFE,
+0x9D9D97,
+0x474F52,
+0x1D1D21,
+0x835432,
+0xB02E26,
+0xF9801D,
+0xFED83D,
+0x80C71F,
+0x5E7C16,
+0x169C9C,
+0x3AB3DA,
+0x3C44AA,
+0x8932B8,
+0xC74EBD,
+0xF38BAA,
+]
+
 # Mostly empty palette (meant for picking colors from images)
 cols_pick = [
 0,
@@ -257,6 +297,8 @@ palettes = [
 (cols_msp,  "MS Paint"),
 (cols_pt,   "Pinta"),
 (cols_sp,   "SuperPaint"),
+(cols_mc1,  "old Minecraft"),
+(cols_mc2,  "new Minecraft"),
 (cols_pick, "empty"),
 ]
 
