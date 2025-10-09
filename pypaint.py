@@ -10,6 +10,9 @@ RES = 1200, 800
 # canvas background color
 CANVAS_BG = 0xffffff
 
+# Should the image be saved automatically each time the user clears the canvas?
+CLEAR_ALSO_SAVES = False
+
 # brush size (large)
 BRUSH = 21
 
@@ -454,15 +457,20 @@ class Paint:
         self.hide = False
         self.title()
 
+    def save_img(self):
+        "Save image to PNG file"
+        pygame.image.save(self.img, time.strftime("%y%m%d_%H%M%S.png"))
+
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                if CLEAR_ALSO_SAVES:
+                    self.save_img()
                 self.undo.append(self.img.copy())
                 self.img.fill(CANVAS_BG)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                pygame.image.save(self.img,
-                        time.strftime("%y%m%d_%H%M%S.png"))
+                self.save_img()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1 and pygame.mouse.get_pos()[0] < RES[0]:
                     self.mdown = True
@@ -498,6 +506,8 @@ class Paint:
                             self.img = self.undo[-2].copy()
                             self.undo = [self.undo[-1], self.undo[-2]]
                     if yp == -3 and xp == 2:    # clear
+                        if CLEAR_ALSO_SAVES:
+                            self.save_img()
                         self.undo.append(self.img.copy())
                         self.img.fill(CANVAS_BG)
 
