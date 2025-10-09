@@ -7,6 +7,9 @@ import pygame, os, sys, time, random, math
 # canvas size
 RES = 1200, 800
 
+# canvas background color
+CANVAS_BG = 0xffffff
+
 # brush size (large)
 BRUSH = 21
 
@@ -436,7 +439,7 @@ class Paint:
                 self.img = pygame.transform.smoothscale(self.img, (w, h))
         else:
             self.img = pygame.Surface(RES)
-            self.img.fill(0xffffff)
+            self.img.fill(CANVAS_BG)
         self.mdown = False
         self.palnum = 0
         self.cols = palettes[self.palnum][0]
@@ -456,7 +459,7 @@ class Paint:
             if event.type == pygame.QUIT: self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.undo.append(self.img.copy())
-                self.img.fill(0xffffff)
+                self.img.fill(CANVAS_BG)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 pygame.image.save(self.img,
                         time.strftime("%y%m%d_%H%M%S.png"))
@@ -496,7 +499,7 @@ class Paint:
                             self.undo = [self.undo[-1], self.undo[-2]]
                     if yp == -3 and xp == 2:    # clear
                         self.undo.append(self.img.copy())
-                        self.img.fill(0xffffff)
+                        self.img.fill(CANVAS_BG)
 
                     if yp == -2 and xp == 0:
                         self.tool = 0
