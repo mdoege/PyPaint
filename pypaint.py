@@ -10,7 +10,7 @@ RES = 1200, 800
 # canvas background color
 CANVAS_BG = 0xffffff
 
-# Should the image be saved automatically each time the user clears the canvas?
+# Save image automatically when clearing the canvas?
 CLEAR_ALSO_SAVES = False
 
 # brush size (large)
@@ -87,7 +87,7 @@ cols_s = [
 0xff80ff,
 ]
 
-# GNOME
+# GNOME background colors (2021)
 cols_g = [
 0,
 0xffffff,
@@ -101,7 +101,7 @@ cols_g = [
 0xc17d11,
 ]
 
-# PICO-8
+# PICO-8 (2015)
 cols_p = [
 0,
 0xffffff,
@@ -122,7 +122,7 @@ cols_p = [
 0xffccaa,
 ]
 
-# DeluxePaint (Dan Silva)
+# DeluxePaint (Dan Silva, 1985)
 cols_d = [
 0,
 0xa0a0a0,
@@ -158,7 +158,7 @@ cols_d = [
 0xffffff,
 ]
 
-# MS Paint classic
+# MS Paint classic / Paintbrush (1993)
 cols_msp = [
 0xffffff,
 0,
@@ -190,7 +190,7 @@ cols_msp = [
 0x804000,
 ]
 
-# Pinta
+# Pinta (2010)
 cols_pt = [
 0xffffff,
 0,
@@ -228,7 +228,7 @@ cols_pt = [
 0xff7fb6,
 ]
 
-# SuperPaint (Richard Shoup)
+# SuperPaint (Richard Shoup, 1973)
 cols_sp = [
 0xe0e0e0,
 0,
