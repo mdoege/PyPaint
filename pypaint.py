@@ -13,6 +13,9 @@ CANVAS_BG = 0xffffff
 # Save image automatically when clearing the canvas?
 CLEAR_ALSO_SAVES = False
 
+# frame rate (in frames per second)
+FPS = 50
+
 # brush size (large)
 BRUSH = 21
 
@@ -608,7 +611,7 @@ class Paint:
     def run(self):
         self.running = True
         while self.running:
-            self.clock.tick(50)
+            self.clock.tick(FPS)
             self.events()
             self.update()
         pygame.quit()
