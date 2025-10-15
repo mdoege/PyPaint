@@ -30,6 +30,7 @@ Requires PyGame
 * **P**: Switch to different ***p***alette
 * **T**: Switch drawing ***t***ool
 * **B**: Toggle ***b***rush size (large/small)
+* **M**: Toggle text ***m***arker / highlighter mode when using dotted pen (only draws where there is background color, leaving other colors as they are)
 * **U**: ***U***ndo last painting operation
 * **H**: ***H***ide palette
 * **C**: ***C***olor picker: gets active color from pixel at mouse position

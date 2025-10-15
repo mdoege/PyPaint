@@ -7,8 +7,11 @@ import pygame, os, sys, time, random, math
 # canvas size
 RES = 1200, 800
 
-# canvas background color
+# canvas background color (white)
 CANVAS_BG = 0xffffff
+
+# marker background color (white)
+MARKER_BG = (255, 255, 255, 255)
 
 # Save image automatically when clearing the canvas?
 CLEAR_ALSO_SAVES = False
@@ -458,6 +461,7 @@ class Paint:
         self.line_start = 0, 0
         self.bezier = []
         self.hide = False
+        self.marker = False
         self.title()
 
     def save_img(self):
@@ -583,6 +587,9 @@ class Paint:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
                 self.small_brush = not self.small_brush
                 self.title()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                self.marker = not self.marker
+                self.title()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
                 self.hide = not self.hide
             if event.type == pygame.KEYDOWN and event.key == pygame.K_u:
@@ -643,6 +650,8 @@ class Paint:
             bb = ", large brush"
         if self.tool == T_FIL:  # flood fill
             bb = ""
+        if self.tool == T_DOT and self.marker:  # highlighter mode
+            bb += ", highlighter mode"
         pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palettes[self.palnum][1]} palette)')
 
     def update(self):
@@ -653,8 +662,21 @@ class Paint:
                 brsize = BRUSH
             x, y = pygame.mouse.get_pos()
             if self.tool == T_DOT: # pen (aka dotted freehand in Deluxe Paint)
-                pygame.draw.rect(self.img, self.cols[self.col],
-                    [x - brsize // 2, y - brsize // 2, brsize, brsize])
+                if self.marker:    #   in text marker / highlighter mode
+                    for yy in range(brsize):
+                        for xx in range(brsize):
+                            try:
+                                c = self.img.get_at((x - brsize // 2 + xx,
+                                                     y - brsize // 2 + yy))
+                            except:
+                                continue
+                            if c == MARKER_BG:
+                                self.img.set_at((x - brsize // 2 + xx,
+                                                 y - brsize // 2 + yy),
+                                                 self.cols[self.col])
+                else:              #   in normal mode
+                    pygame.draw.rect(self.img, self.cols[self.col],
+                        [x - brsize // 2, y - brsize // 2, brsize, brsize])
             elif self.tool == T_CON: # pen (lines)
                 steps = max(1, abs(x - self.lastpos[0]),
                         abs(y - self.lastpos[1]))
