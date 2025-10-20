@@ -519,6 +519,8 @@ class Paint:
                         self.img.fill(CANVAS_BG)
 
                     if yp == -2 and xp == 0:
+                        if self.tool == 0:
+                            self.marker = not self.marker
                         self.tool = 0
                         self.title()
                     if yp == -2 and xp == 1:
