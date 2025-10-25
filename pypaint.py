@@ -536,6 +536,8 @@ class Paint:
                         self.bezier = []
                         self.title()
                     if yp == -1 and xp == 1:
+                        if self.tool == 4:
+                            self.marker = not self.marker
                         self.tool = 4
                         self.title()
                     if yp == -1 and xp == 2:
@@ -652,7 +654,7 @@ class Paint:
             bb = ", large brush"
         if self.tool == T_FIL:  # flood fill
             bb = ""
-        if self.tool == T_DOT and self.marker:  # highlighter mode
+        if self.marker and (self.tool == T_DOT or self.tool == T_AIR):
             bb += ", highlighter mode"
         pygame.display.set_caption(f'Paint ({tname[self.tool]}{bb}, {palettes[self.palnum][1]} palette)')
 
@@ -692,10 +694,24 @@ class Paint:
                 for n in range(AIRDENS):
                     phi = random.uniform(0, 2 * math.pi)
                     r = random.gauss(0, brsize)
-                    if abs(r) <= 2 * brsize:
+                    if abs(r) <= 2 * brsize and not self.marker:
                         pygame.draw.rect(self.img, self.cols[self.col],
                         [x + r * math.sin(phi), y + r * math.cos(phi),
                             AIRSIZE, AIRSIZE])
+                    if abs(r) <= 2 * brsize and self.marker:
+                        xr = int(x + r * math.sin(phi))
+                        yr = int(y + r * math.cos(phi))
+                        for yy in range(AIRSIZE):
+                            for xx in range(AIRSIZE):
+                                try:
+                                    c = self.img.get_at((xr + xx,
+                                                         yr + yy))
+                                except:
+                                    continue
+                                if c == MARKER_BG:
+                                    self.img.set_at((xr + xx,
+                                                     yr + yy),
+                                                     self.cols[self.col])
 
         self.screen.fill(COLBG)
         self.screen.blit(self.img, (0, 0))

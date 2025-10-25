@@ -30,7 +30,7 @@ Requires PyGame
 * **P**: Switch to different ***p***alette
 * **T**: Switch drawing ***t***ool
 * **B**: Toggle ***b***rush size (large/small)
-* **M**: Toggle text ***m***arker / highlighter mode: The dotted pen now only affects background color pixels, effectively drawing behind other colors on the canvas. This mode is also toggled by clicking on the dotted pen icon. (It is similar to using a stencil in DeluxePaint.)
+* **M**: Toggle text ***m***arker / highlighter mode: The dotted pen and airbrush tools now only affect background color pixels, effectively drawing behind other colors on the canvas. This mode is also toggled by clicking on the dotted pen/airbrush icons. (This highlighter mode is similar to using a stencil in DeluxePaint.)
 * **U**: ***U***ndo last painting operation
 * **H**: ***H***ide palette
 * **C**: ***C***olor picker: Picks the currently active color from the pixel under the mouse cursor.
