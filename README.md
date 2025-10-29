@@ -27,7 +27,8 @@ Requires PyGame
 
 #### Keyboard
 
-* **P**: Switch to different ***p***alette
+* **P**: Switch to next ***p***alette
+* **O**: Switch to previous palette
 * **T**: Switch drawing ***t***ool
 * **B**: Toggle ***b***rush size (large/small)
 * **M**: Toggle text ***m***arker / highlighter mode: The dotted pen and airbrush tools now only affect background color pixels, effectively drawing behind other colors on the canvas. This mode is also toggled by clicking on the dotted pen/airbrush icons. (This highlighter mode is similar to using a stencil in DeluxePaint.)

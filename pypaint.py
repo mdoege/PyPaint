@@ -581,6 +581,14 @@ class Paint:
                 self.col = 0
                 self.getcolpic()
                 self.title()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_o:
+                self.palnum -= 1
+                if self.palnum < 0:
+                    self.palnum = len(palettes) - 1
+                self.cols = palettes[self.palnum][0]
+                self.col = 0
+                self.getcolpic()
+                self.title()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                 self.tool += 1
                 if self.tool > len(tname) - 1:
