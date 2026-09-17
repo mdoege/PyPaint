@@ -465,8 +465,33 @@ class Paint:
         self.title()
 
     def save_img(self):
+        "Save image to a file (either PNG or PPM)"
+        self.save_img_png()
+
+    def save_img_png(self):
         "Save image to PNG file"
+
+        # first set alpha channel to 255 for all pixels,
+        # otherwise the saved picture will be empty
+        w, h = self.img.get_size()
+        for y in range(h):
+            for x in range(w):
+                c = self.img.get_at((x, y))
+                self.img.set_at((x, y), (c[0], c[1], c[2], 255))
+
         pygame.image.save(self.img, time.strftime("%y%m%d_%H%M%S.png"))
+
+    def save_img_ppm(self):
+        "Save image to NetPBM PPM file (P3 ASCII format)"
+        out = open(time.strftime("%y%m%d_%H%M%S.ppm"), "w")
+        w, h = self.img.get_size()
+        out.write("P3\n%u %u\n255\n" % (w, h))
+        for y in range(h):
+            for x in range(w):
+                c = self.img.get_at((x, y))
+                b = "%3u %3u %3u\n" % (c[0], c[1], c[2])
+                out.write(b)
+        out.close()
 
     def events(self):
         for event in pygame.event.get():

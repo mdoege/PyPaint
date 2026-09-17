@@ -12,7 +12,7 @@ Requires PyGame
 * Drawing tools: pen (dotted and continuous), straight lines, quadratic Bézier curves, airbrush, and flood fill
 * Several included palettes
 * Single-level undo
-* Saves files as PNG with automatic filename selection based on the current date (YMD) and time
+* Saves images with automatic filename selection based on the current date (YMD) and time
 
 ### Usage
 
@@ -37,7 +37,7 @@ Requires PyGame
 * **C**: ***C***olor picker: Picks the currently active color from the pixel under the mouse cursor.
 If that color is not found in the current palette, it will be appended. Note that these palette changes are not saved permanently. The empty palette is particularly useful for picking colors from an image.
 * **Space**: Erase drawing (can be undone)
-* **Return**: Save as PNG in current directory (filename based on date and time)
+* **Return**: Save image as PNG or PPM in current directory (filename based on date and time)
 
 ### License
 
