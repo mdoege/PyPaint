@@ -10,8 +10,8 @@ RES = 1200, 800
 # canvas background color (white)
 CANVAS_BG = 0xffffff
 
-# marker background color (white)
-MARKER_BG = (255, 255, 255, 255)
+# marker background color (white), alpha can be either 0 or 255
+MARKER_BG = [(255, 255, 255, 0), (255, 255, 255, 255)]
 
 # Save image automatically when clearing the canvas?
 CLEAR_ALSO_SAVES = False
@@ -707,7 +707,7 @@ class Paint:
                                                      y - brsize // 2 + yy))
                             except:
                                 continue
-                            if c == MARKER_BG:
+                            if c in MARKER_BG:
                                 self.img.set_at((x - brsize // 2 + xx,
                                                  y - brsize // 2 + yy),
                                                  self.cols[self.col])
@@ -741,7 +741,7 @@ class Paint:
                                                          yr + yy))
                                 except:
                                     continue
-                                if c == MARKER_BG:
+                                if c in MARKER_BG:
                                     self.img.set_at((xr + xx,
                                                      yr + yy),
                                                      self.cols[self.col])
